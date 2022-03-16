@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using UnityEngine.Animations;
 
 public class PlayerMechController : MechController
 {
@@ -21,34 +20,53 @@ public class PlayerMechController : MechController
     [Header("Rigidbody")]
     public float maxSpeed = 30.0f;
 
+    [Header("Rotation")]
+    public float rotationSpeed = 5f;
+
+    [Header("Mech Swapping/Combine cooldown")]
+    [Tooltip("How much time cooldown should last")]
+    public float cooldownTime = 2.0f;
+    [Tooltip("How fast the time should count down")]
+    public float cooldownRate = 0.5f;
+    float cool_count_down;
+
+    public Animator _mechAnimator { get; set; }
+
+    MechSwitcherManager mechSwapper;
+
+    CameraScript camera;
     Rigidbody mechRigidbody;
-    [SerializeField] CinemachineFreeLook cinemachineVirtual;
 
     [Header("Input")]
-    [SerializeField] PlayerInput input;
     Player playerInput;
 
     // Start is called before the first frame update
     void Start()
     {
         mechRigidbody = GetComponent<Rigidbody>();
-
-        if (cinemachineVirtual == null)
-            cinemachineVirtual = FindObjectOfType<CinemachineFreeLook>();
-        CinemachineCameraTarget = cinemachineVirtual.Follow.gameObject;
+        camera = GetComponent<CameraScript>();
+        mechSwapper = GetComponent<MechSwitcherManager>();
 
         playerInput = new Player();
         playerInput.InGame.Enable();
+
+        cool_count_down = 0f;
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void OnEnable()
+    private void FixedUpdate()
     {
-        
+        Turn();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (cool_count_down > 0f)
+            cool_count_down -= cooldownRate * Time.deltaTime;
+
+        Swap();
         Move();
     }
 
@@ -56,16 +74,23 @@ public class PlayerMechController : MechController
     {
         if (playerInput.InGame.Move.ReadValue<Vector2>() != Vector2.zero && mechRigidbody.velocity.magnitude < maxSpeed)
         {
-            Vector3 direction = new Vector3(playerInput.InGame.Move.ReadValue<Vector2>().x, 0f, playerInput.InGame.Move.ReadValue<Vector2>().y);
-            Debug.Log(direction);
-            mechRigidbody.AddForce(direction * MoveSpeed, ForceMode.Force);
+            Vector3 direction = camera.GetDirection(playerInput.InGame.Move.ReadValue<Vector2>());
+            mechRigidbody.AddForce(direction * MoveSpeed * Time.deltaTime);
         }
     }
 
-    //void OnMove(InputAction input)
-    //{
-    //    Vector3 direction = new Vector3(input.ReadValue<Vector2>().x, 0f, input.ReadValue<Vector2>().y);
-    //    Debug.Log(direction);
-    //    mechRigidbody.AddForce(direction * MoveSpeed);
-    //}
+    void Turn()
+    {
+        Quaternion rotation = Quaternion.Euler(0f, camera.thirdPersonVCam.transform.eulerAngles.y, 0f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotationSpeed * RotationSmoothTime * Time.deltaTime);
+    }
+
+    void Swap()
+    {
+        if (playerInput.InGame.Combine.triggered && cool_count_down <= 0f)
+        {
+            mechSwapper.OnGetMech();
+            cool_count_down = cooldownTime;
+        }
+    }
 }
