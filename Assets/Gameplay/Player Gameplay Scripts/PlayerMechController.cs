@@ -30,6 +30,9 @@ public class PlayerMechController : MechController
     public float cooldownRate = 0.5f;
     float cool_count_down;
 
+    [Header("Game world Manager")]
+    [SerializeField] GameWorldManagerScript gameWorldManager;
+
     public Animator _mechAnimator { get; set; }
 
     MechSwitcherManager mechSwapper;
@@ -66,6 +69,8 @@ public class PlayerMechController : MechController
         if (cool_count_down > 0f)
             cool_count_down -= cooldownRate * Time.deltaTime;
 
+        Pause();
+
         Swap();
         Move();
     }
@@ -91,6 +96,16 @@ public class PlayerMechController : MechController
         {
             mechSwapper.OnGetMech();
             cool_count_down = cooldownTime;
+        }
+    }
+
+    void Pause()
+    {
+        if (playerInput.InGame.Pause.triggered && gameWorldManager.gameState == GAMESTATE.PLAY)
+        {
+            gameWorldManager.gameState = GAMESTATE.PAUSE;
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
         }
     }
 }
