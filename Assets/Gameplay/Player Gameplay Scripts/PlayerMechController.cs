@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
@@ -42,6 +44,15 @@ public class PlayerMechController : MechController
 
     [Header("Input")]
     Player playerInput;
+    bool isPaused = false;
+    InputAction pauseAction;
+
+    // Attack functions
+    public delegate void LeftAttack();
+    public delegate void RightAttack();
+    public LeftAttack leftAttack;
+    public RightAttack rightAttack;
+
 
     // Start is called before the first frame update
     void Start()
@@ -53,10 +64,15 @@ public class PlayerMechController : MechController
         playerInput = new Player();
         playerInput.InGame.Enable();
 
+        pauseAction = playerInput.InGame.Pause;
+        
+
         cool_count_down = 0f;
 
         Cursor.lockState = CursorLockMode.Locked;
     }
+
+
 
     private void FixedUpdate()
     {
@@ -69,8 +85,15 @@ public class PlayerMechController : MechController
         if (cool_count_down > 0f)
             cool_count_down -= cooldownRate * Time.deltaTime;
 
-        Pause();
-
+        if (pauseAction.phase == InputActionPhase.Performed && !isPaused)
+        {
+            Pause();
+        }
+        else if (pauseAction.phase == InputActionPhase.Performed && isPaused)
+        {
+            Resume();
+        }
+      
         Swap();
         Move();
     }
@@ -101,11 +124,17 @@ public class PlayerMechController : MechController
 
     void Pause()
     {
-        if (playerInput.InGame.Pause.triggered && gameWorldManager.gameState == GAMESTATE.PLAY)
-        {
-            gameWorldManager.gameState = GAMESTATE.PAUSE;
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
-        }
+        gameWorldManager.gameState = GAMESTATE.PAUSE;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+        isPaused = true;
+    }
+
+    void Resume()
+    {
+        gameWorldManager.gameState = GAMESTATE.PLAY;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        isPaused = false;
     }
 }
