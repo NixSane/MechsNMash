@@ -600,6 +600,7 @@ GameObject:
   - component: {fileID: 2729588255415444787}
   - component: {fileID: 2480299714942124766}
   - component: {fileID: 2152538008418695444}
+  - component: {fileID: 8749304278249311717}
   m_Layer: 0
   m_Name: Spiderbot
   m_TagString: Untagged
@@ -656,6 +657,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 20.260391, y: 25.356266, z: 13.723694}
   m_Center: {x: 0.42394257, y: 10.178133, z: 0.100860596}
+--- !u!114 &8749304278249311717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3362678892508610441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2bedaf3b05cf4e40bc5b6381af628d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasLeftAttack: 1
+  hasRightAttack: 0
+  canJump: 0
+  hasJetPack: 0
+  shooting_rate: 0.3
+  shootingRange: 50
+  ShootingPoint: {fileID: 1866141729363253894}
 --- !u!1 &3378135760730889043
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@ public class MechSwitcherManager : MonoBehaviour
     GameObject currentMech;
     GameObject duplicateMech;
 
+    MechAttacks mechStateAttacks;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,8 +47,15 @@ public class MechSwitcherManager : MonoBehaviour
             currentMech = swappableMechs[++current_index];
         }
 
+        // Reset the attacks before getting new set of attacks
+        if (GetComponent<MechAttacks>() != null)
+            duplicateMech.GetComponent<MechAttacks>().ResetAttacks();
+
         Destroy(duplicateMech);
         duplicateMech = Instantiate(currentMech, transform);
         duplicateMech.transform.localPosition = Vector3.zero;
+
+        if (duplicateMech.GetComponent<MechAttacks>() != null)
+            mechStateAttacks = duplicateMech.GetComponent<MechAttacks>();
     }
 }

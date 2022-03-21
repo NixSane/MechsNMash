@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 using Cinemachine;
 using UnityEngine.Animations;
 
@@ -48,10 +49,8 @@ public class PlayerMechController : MechController
     InputAction pauseAction;
 
     // Attack functions
-    public delegate void LeftAttack();
-    public delegate void RightAttack();
-    public LeftAttack leftAttack;
-    public RightAttack rightAttack;
+    public UnityAction leftAttack;
+    public UnityAction rightAttack;
 
 
     // Movement
@@ -89,11 +88,35 @@ public class PlayerMechController : MechController
         Move();
     }
 
+    public Vector3 AimVector()
+    {
+        Vector3 aim_vector = camera.thirdPersonVCam.transform.forward;
+        return aim_vector;
+    }
+
     public void OnMove(InputValue input)
     {
         Vector2 vector = input.Get<Vector2>();
 
         movementVec = new Vector3(vector.x, 0f, vector.y);
+    }
+
+    /// <summary>
+    /// Attack for left side
+    /// </summary>
+    void OnLeftAttack()
+    {
+        if (leftAttack != null)
+            leftAttack.Invoke();
+    }
+
+    /// <summary>
+    /// Attack for Right side
+    /// </summary>
+    void OnRightAttack()
+    {
+        if (rightAttack != null)
+            rightAttack.Invoke();
     }
 
     void Move()

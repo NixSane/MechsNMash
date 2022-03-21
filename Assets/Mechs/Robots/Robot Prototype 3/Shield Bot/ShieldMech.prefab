@@ -1590,6 +1590,7 @@ GameObject:
   - component: {fileID: 4737596343138941572}
   - component: {fileID: 1684203399094051070}
   - component: {fileID: 919132147574806668}
+  - component: {fileID: 558433418532085472}
   m_Layer: 0
   m_Name: ShieldMech
   m_TagString: Untagged
@@ -1646,6 +1647,25 @@ CapsuleCollider:
   m_Height: 32.860165
   m_Direction: 1
   m_Center: {x: 0.41493225, y: 16.430082, z: 0}
+--- !u!114 &558433418532085472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5401085242407395390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d484d5d41a9a1643af0201e72d86046, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasLeftAttack: 0
+  hasRightAttack: 1
+  canJump: 0
+  hasJetPack: 0
+  ShieldBashBox: {fileID: 2060032238173939764}
+  hitBox: {fileID: 8980106003419258593}
+  attackDuration: 0.5
 --- !u!1 &5505296401907596854
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,24 +6,43 @@ public class SpiderAttacks :  MechAttacks
 {
     [Header("Crab bot properties")]
     public float shooting_rate = 0.3f;
+    public float shootingRange = 50.0f;
+    public Transform ShootingPoint;
 
+    void Start()
+    {
+        if (GetComponentInParent<PlayerMechController>() != null)
+        {
+            mainMechController = GetComponentInParent<PlayerMechController>();
+            mainMechController.leftAttack += LeftAttack;
+            mainMechController.rightAttack += RightAttack;
+        }
+        return;
+    }
+
+    private void FixedUpdate()
+    {
+        Debug.DrawRay(ShootingPoint.position, mainMechController.AimVector() * shootingRange, Color.blue);
+    }
 
 
     public override void LeftAttack()
     {
-        Debug.Log("Crab shooting!!! Pew Pew");
+        Shoot();
     }
 
     public override void RightAttack()
     {
         if (!hasRightAttack)
-            Debug.Log("No right attack");
-        else
             LeftAttack();
     }
 
     void Shoot()
     {
-
+        RaycastHit hit;
+        if (Physics.Raycast(ShootingPoint.position, mainMechController.AimVector(), out hit, shootingRange))
+        {
+            Debug.Log(hit.collider.name);
+        }
     }
 }
