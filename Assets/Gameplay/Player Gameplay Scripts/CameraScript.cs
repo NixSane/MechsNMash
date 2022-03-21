@@ -9,9 +9,9 @@ public class CameraScript : MonoBehaviour
 
     Vector3 cameraDirection;
 
-    public Vector3 GetDirection(Vector2 input)
+    public Vector3 GetDirection(Vector3 input)
     {
-        cameraDirection = thirdPersonVCam.transform.forward * input.y + thirdPersonVCam.transform.right * input.x;
+        cameraDirection = thirdPersonVCam.transform.forward * input.z + thirdPersonVCam.transform.right * input.x;
         cameraDirection.y = 0f;
 
         return cameraDirection.normalized;

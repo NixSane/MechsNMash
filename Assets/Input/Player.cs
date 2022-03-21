@@ -97,7 +97,16 @@ public partial class @Player : IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""f5c6e5f1-fd11-4711-aded-bb0c646b427c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -230,6 +239,17 @@ public partial class @Player : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e53e337-1d45-4eb2-9997-ae84426b1cd0"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -784,6 +804,7 @@ public partial class @Player : IInputActionCollection2, IDisposable
         m_InGame_Separate = m_InGame.FindAction("Separate", throwIfNotFound: true);
         m_InGame_JetBoost = m_InGame.FindAction("JetBoost", throwIfNotFound: true);
         m_InGame_Pause = m_InGame.FindAction("Pause", throwIfNotFound: true);
+        m_InGame_Jump = m_InGame.FindAction("Jump", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -864,6 +885,7 @@ public partial class @Player : IInputActionCollection2, IDisposable
     private readonly InputAction m_InGame_Separate;
     private readonly InputAction m_InGame_JetBoost;
     private readonly InputAction m_InGame_Pause;
+    private readonly InputAction m_InGame_Jump;
     public struct InGameActions
     {
         private @Player m_Wrapper;
@@ -876,6 +898,7 @@ public partial class @Player : IInputActionCollection2, IDisposable
         public InputAction @Separate => m_Wrapper.m_InGame_Separate;
         public InputAction @JetBoost => m_Wrapper.m_InGame_JetBoost;
         public InputAction @Pause => m_Wrapper.m_InGame_Pause;
+        public InputAction @Jump => m_Wrapper.m_InGame_Jump;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -909,6 +932,9 @@ public partial class @Player : IInputActionCollection2, IDisposable
                 @Pause.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnPause;
+                @Jump.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_InGameActionsCallbackInterface = instance;
             if (instance != null)
@@ -937,6 +963,9 @@ public partial class @Player : IInputActionCollection2, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -1064,6 +1093,7 @@ public partial class @Player : IInputActionCollection2, IDisposable
         void OnSeparate(InputAction.CallbackContext context);
         void OnJetBoost(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

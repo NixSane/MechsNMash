@@ -1999,7 +1999,8 @@ Transform:
   m_LocalRotation: {x: 0.6524883, y: 0.20969582, z: 0.23328927, w: 0.68982816}
   m_LocalPosition: {x: 0.04007123, y: 0.05224921, z: 0.064807445}
   m_LocalScale: {x: 0.32958156, y: 2.7263384, z: 0.32958156}
-  m_Children: []
+  m_Children:
+  - {fileID: 4473317146400090296}
   m_Father: {fileID: 5686174833200612964}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2148,6 +2149,36 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6324517405300248446
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4473317146400090296}
+  m_Layer: 0
+  m_Name: Shooting point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4473317146400090296
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6324517405300248446}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0004, y: 0.04363, z: -0.0024}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4623872867998166851}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6529566761356895032
 GameObject:
   m_ObjectHideFlags: 0

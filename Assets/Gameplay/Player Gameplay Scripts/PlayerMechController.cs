@@ -54,6 +54,9 @@ public class PlayerMechController : MechController
     public RightAttack rightAttack;
 
 
+    // Movement
+    Vector3 movementVec;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -72,8 +75,6 @@ public class PlayerMechController : MechController
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-
-
     private void FixedUpdate()
     {
         Turn();
@@ -84,25 +85,22 @@ public class PlayerMechController : MechController
     {
         if (cool_count_down > 0f)
             cool_count_down -= cooldownRate * Time.deltaTime;
-
-        if (pauseAction.phase == InputActionPhase.Performed && !isPaused)
-        {
-            Pause();
-        }
-        else if (pauseAction.phase == InputActionPhase.Performed && isPaused)
-        {
-            Resume();
-        }
       
-        Swap();
         Move();
+    }
+
+    public void OnMove(InputValue input)
+    {
+        Vector2 vector = input.Get<Vector2>();
+
+        movementVec = new Vector3(vector.x, 0f, vector.y);
     }
 
     void Move()
     {
-        if (playerInput.InGame.Move.ReadValue<Vector2>() != Vector2.zero && mechRigidbody.velocity.magnitude < maxSpeed)
+        if (movementVec != Vector3.zero && mechRigidbody.velocity.magnitude < maxSpeed)
         {
-            Vector3 direction = camera.GetDirection(playerInput.InGame.Move.ReadValue<Vector2>());
+            Vector3 direction = camera.GetDirection(movementVec);
             mechRigidbody.AddForce(direction * MoveSpeed * Time.deltaTime);
         }
     }
@@ -113,13 +111,10 @@ public class PlayerMechController : MechController
         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotationSpeed * RotationSmoothTime * Time.deltaTime);
     }
 
-    void Swap()
+    public void OnCombine()
     {
-        if (playerInput.InGame.Combine.triggered && cool_count_down <= 0f)
-        {
-            mechSwapper.OnGetMech();
-            cool_count_down = cooldownTime;
-        }
+        mechSwapper.OnGetMech();
+        cool_count_down = cooldownTime;
     }
 
     void Pause()
@@ -136,5 +131,13 @@ public class PlayerMechController : MechController
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         isPaused = false;
+    }
+
+    public void OnPause()
+    {
+        if (!isPaused)
+            Pause();
+        else
+            Resume();
     }
 }
